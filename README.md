@@ -1,1 +1,1 @@
-# Manic_Pets
+# Harbugan's Manic Pets
