@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<title>HarbuZoo</title>
+<title>Harbugan's Manic Pets</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#120a2e">
-<meta name="description" content="HarbuZoo - pixelart match-3 dyrespil med uendelig sti, forhindringer og chiptune-musik.">
+<meta name="description" content="Harbugan's Manic Pets - a pixel-art match-3 pet game with an endless path, obstacles and chiptune music.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="HarbuZoo">
+<meta name="apple-mobile-web-app-title" content="Manic Pets">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23120a2e'/%3E%3Ccircle cx='90' cy='100' r='56' fill='%23e8334a'/%3E%3Ctext x='90' y='122' font-size='72' text-anchor='middle'%3E%F0%9F%90%B1%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap" media="print" onload="this.media='all'">
 <style>
@@ -122,7 +122,7 @@
   .sp-bomb::after { background-image: var(--ic-bomb); }
   .sp-row, .sp-col, .sp-bomb { outline: 2px solid var(--glow); outline-offset: -1px; animation: glow .7s steps(2) infinite; }
   .sp-row { --glow: var(--cyan); } .sp-col { --glow: var(--lime); } .sp-bomb { --glow: var(--red); }
-  /* specialbrikker fortæller selv hvad de gør: pilene glider, bomben pulserer */
+  /* special tiles show what they do: arrows slide, the bomb pulses */
   .sp-row::after { animation: nudgeX .5s steps(2) infinite; } .sp-col::after { animation: nudgeY .5s steps(2) infinite; }
   .sp-bomb::after { animation: pulseB .5s steps(2) infinite; }
   @keyframes nudgeX { 50% { translate: 2px 0; } } @keyframes nudgeY { 50% { translate: 0 2px; } } @keyframes pulseB { 50% { scale: 1.12; } }
@@ -138,7 +138,7 @@
   .tile.sel > i { transform: scale(1.12); outline: 3px solid var(--gold); outline-offset: -1px; }
   .tile.hint > i { animation: hintA .6s steps(2) infinite; }
   @keyframes hintA { 50% { transform: scale(1.14); } }
-  /* landing squash, idle twitch and pop: på det indre element, så brikkens position aldrig påvirkes */
+  /* landing squash, idle twitch and pop: on the inner element, so the tile's position is never affected */
   .tile.land > i:not([class*="zz"]) { animation: landA .16s steps(3); }
   @keyframes landA { 0% { transform: scale(1.14,.82); } 60% { transform: scale(.95,1.08); } 100% { transform: none; } }
   .tile.twitch > i:not([class*="zz"]) { animation: twitchA .45s steps(5); }
@@ -249,7 +249,7 @@
   @keyframes starpop { 0% { transform: scale(0) rotate(-120deg); opacity: 0; } 65% { transform: scale(1.7) rotate(15deg); opacity: 1; } 100% { transform: none; } }
   button.play { background: linear-gradient(#ffe27a, var(--gold)); }
 
-  /* ---------- 2.0: feedback og læsbarhed ---------- */
+  /* ---------- 2.0: feedback and readability ---------- */
   .fx.neg { color: #ff6b7f; font-size: 8px; }
   .bflash { position: absolute; inset: 0; z-index: 6; pointer-events: none; animation: bfl .12s steps(3) forwards; }
   @keyframes bfl { to { opacity: 0; } }
@@ -257,7 +257,7 @@
   .stamp.sm .k { font-size: 20px; text-shadow: 2px 2px 0 var(--red), 3px 3px 0 var(--ink); }
   .stamp.sm.cyan .k { text-shadow: 2px 2px 0 #1f7ab3, 3px 3px 0 var(--ink); }
   .stamp.sm .t { font-size: 8px; }
-  /* brættet er hovedpersonen: point er størst, resten træder et skridt tilbage */
+  /* the board is the main character: score is largest, the rest steps back */
   .stats .stat:first-child { flex: 1.5; }
   .stats .stat:not(:first-child) { flex: .8; opacity: .8; }
   .stats .stat:not(:first-child) b { font-size: 10px; }
@@ -277,31 +277,31 @@
   <header>
     <canvas id="mascot" class="mascot" width="36" height="36"></canvas>
     <div class="hd">
-      <div class="brand">HARBU<span>ZOO</span><small>動物園</small></div>
+      <div class="brand">MANIC <span>PETS</span><small>動物園</small></div>
       <div class="bubble" id="bubble">GANBATTE!</div>
     </div>
-    <button class="pbtn sq" id="musicBtn" aria-pressed="true" title="Musik">&#9835;</button>
-    <button class="pbtn sq txt" id="soundBtn" aria-pressed="true" title="Lydeffekter">SFX</button>
-    <button class="pbtn sq" id="mapBtn" title="Kort" hidden>&#9650;</button>
+    <button class="pbtn sq" id="musicBtn" aria-pressed="true" title="Music">&#9835;</button>
+    <button class="pbtn sq txt" id="soundBtn" aria-pressed="true" title="Sound effects">SFX</button>
+    <button class="pbtn sq" id="mapBtn" title="Map" hidden>&#9650;</button>
   </header>
 
-  <!-- ============ KORT ============ -->
+  <!-- ============ MAP ============ -->
   <section class="screen" id="scrMap">
     <div class="maptop">
-      <div class="chip"><b id="mBane">1</b><i>BANE</i></div>
-      <div class="chip"><b id="mStars">0</b><i>STJERNER</i></div>
+      <div class="chip"><b id="mBane">1</b><i>LEVEL</i></div>
+      <div class="chip"><b id="mStars">0</b><i>STARS</i></div>
       <div class="chip"><b id="mTotal">0</b><i>POINT</i></div>
     </div>
     <div id="mapScroll"><div id="mapInner"><canvas id="mapCanvas"></canvas><div id="car"></div></div></div>
-    <div class="maphint">TRYK P&Aring; EN PRIK FOR AT SPILLE</div>
+    <div class="maphint">TAP A DOT TO PLAY</div>
   </section>
 
   <!-- ============ MATCH-3 ============ -->
   <section class="screen" id="scrGame" hidden>
     <div class="stats">
       <div class="stat"><b id="score">0</b><i>POINT</i></div>
-      <div class="stat"><b id="levelN">1</b><i>BANE</i></div>
-      <div class="stat"><b id="best">0</b><i>REKORD</i></div>
+      <div class="stat"><b id="levelN">1</b><i>LEVEL</i></div>
+      <div class="stat"><b id="best">0</b><i>BEST</i></div>
     </div>
     <div class="timer" id="timer"><div id="timerFill"></div></div>
     <div class="meters">
@@ -312,7 +312,7 @@
     <div class="board-wrap" id="wrap"><div id="board"></div></div>
     <div class="bottom">
       <button class="pbtn" id="shuffleBtn">SHUFFLE <b id="shufN">2</b></button>
-      <div class="small" id="shufHint">+1 ved 1000 point</div>
+      <div class="small" id="shufHint">+1 at 1000 points</div>
     </div>
   </section>
 </div>
@@ -328,7 +328,7 @@
   var SIZE = 8, TYPES = 7;
   var TIME_MAX = 60, TIME_START = 45, TIME_PER_TILE = 0.3;
   var SHUFFLE_START = 2, SHUFFLE_EVERY = 1000, SHUFFLE_CAP = 9;
-  // Tempo: urets stå stille mens brættet løser sig, så hurtigere animation koster aldrig tid - den giver kun rytme.
+  // Tempo: the clock stands still while the board resolves, so faster animation never costs time - it only gives rhythm.
   var SWAP_MS = 100, POP_MS = 130, FALL_MS = 140, BUFFER_MS = 1200;
   var FALL_EZ = 'cubic-bezier(.3,.7,.4,1.12)';                 // let acceleration + lille hop i landingen
   var NAMES = ['NEKO', 'TANUKI', 'KITSUNE', 'PANDA', 'KAPPA', 'TAKO', 'HIYOKO'];
@@ -368,7 +368,7 @@
                    'KSSSSSSSSSDK','KSSSSSSSDDDK','KSSSSSDDDDDK','.KDDDDDDDDK.','..KKKKKKKK..','............'];
   var ROCK_PAL = { K:'#2a1a2e', L:'#b3acd0', S:'#8a82a8', D:'#5d5680' };
   var ROCK2 = { pal: ROCK_PAL, rows: ROCK_ROWS };
-  var ROCK1 = { pal: ROCK_PAL, rows: ROCK_ROWS.map(function (row, y) {      // revnet: ét slag tilbage
+  var ROCK1 = { pal: ROCK_PAL, rows: ROCK_ROWS.map(function (row, y) {      // cracked: one hit left
     var cr = { 3: 5, 4: 6, 5: 5, 6: 6, 7: 7, 8: 7 }[y];
     return cr === undefined ? row : row.substr(0, cr) + 'K' + row.substr(cr + 1);
   }) };
@@ -403,7 +403,7 @@
     return c;
   }
   var spriteCache = {};
-  function spriteFor(type, px) {                 // cachet til canvas-spillene
+  function spriteFor(type, px) {                 // cached for the canvas sprites
     var key = type + '@' + px;
     if (!spriteCache[key]) spriteCache[key] = spriteCanvas(SPRITES[type], px);
     return spriteCache[key];
@@ -476,10 +476,10 @@
   // ====================== Gem ======================
   var save = { done: {}, pos: '0:0', total: 0, best: 0, seed: Math.floor(Math.random() * 99999), sound: true, music: true };
   try {
-    var raw = localStorage.getItem('harbuzoo.save');
+    var raw = localStorage.getItem('manicpets.save');
     if (raw) { var o = JSON.parse(raw); for (var k in o) if (o[k] !== undefined) save[k] = o[k]; }
   } catch (e) {}
-  function persist() { try { localStorage.setItem('harbuzoo.save', JSON.stringify(save)); } catch (e) {} }
+  function persist() { try { localStorage.setItem('manicpets.save', JSON.stringify(save)); } catch (e) {} }
   function totalStars() { var s = 0; for (var k in save.done) s += save.done[k]; return s; }
 
   // ====================== DOM ======================
@@ -501,7 +501,7 @@
   function ac() {
     if (!actx) {
       actx = new (window.AudioContext || window.webkitAudioContext)();
-      var comp = actx.createDynamicsCompressor();             // holder lydene pæne, når mange overlapper
+      var comp = actx.createDynamicsCompressor();             // keeps the sounds tidy when many overlap
       comp.threshold.value = -20; comp.knee.value = 12; comp.ratio.value = 5; comp.attack.value = 0.003; comp.release.value = 0.12;
       sfxBus = actx.createGain(); sfxBus.gain.value = 0.85;
       sfxBus.connect(comp); comp.connect(actx.destination);
@@ -509,13 +509,13 @@
     if (actx.state === 'suspended') actx.resume();
     return actx;
   }
-  // én stemme: tone(frekvens, længde, lydstyrke, bølge, forsinkelse i sek., glid-til-frekvens)
+  // one voice: tone(frequency, length, volume, wave, delay in sec., glide-to-frequency)
   function tone(freq, dur, vol, type, delay, slideTo) {
     if (!soundOn) return;
     try {
       var c = ac(), t = c.currentTime + (delay || 0), now = c.currentTime;
       vEnds = vEnds.filter(function (e) { return e > now; });
-      if (vEnds.length > 26) return;                           // aldrig en mur af lyd
+      if (vEnds.length > 26) return;                           // never a wall of sound
       dur = dur || 0.12; vEnds.push(t + dur);
       var o = c.createOscillator(), g = c.createGain();
       o.type = type || 'square'; o.frequency.setValueAtTime(freq, t);
@@ -531,9 +531,9 @@
   function arp(notes, gap, type, vol) { notes.forEach(function (n, i) { tone(SCALE[n], .11, vol || .036, type, i * (gap || 70) / 1000); }); }
   function vibrate(ms) { if (navigator.vibrate) { try { navigator.vibrate(ms); } catch (e) {} } }
 
-  // ---------- Musik: lille Game Boy-agtig melodi (pulsbølge, trekant-bas og hi-hat) ----------
+  // ---------- Music: small Game Boy-style melody (pulse wave, triangle bass and hi-hat) ----------
   var BPM = 128, STEP = 60 / BPM / 2;                       // ottendedele
-  var LEAD = [                                              // 16 takter à 8 trin. '.' = pause, '=' = hold tonen
+  var LEAD = [                                              // 16 bars of 8 steps. '.' = rest, '=' = hold the note
     'e5 . g5 e5 c5 . d5 e5', 'a4 . c5 e5 a5 . g5 e5', 'f5 . a5 f5 c5 . d5 f5', 'g5 . d5 g5 b4 . d5 g5',
     'c6 . g5 e5 g5 . e5 c5', 'a5 . e5 c5 e5 . a4 c5', 'f5 a5 c6 a5 f5 a5 f5 d5', 'g5 = d5 = b4 d5 g5 =',
     'c5 . a4 c5 f5 . e5 c5', 'd5 . b4 d5 g5 . f5 d5', 'e5 . c5 e5 g5 . e5 c5', 'a4 c5 e5 a5 g5 e5 c5 .',
@@ -562,7 +562,7 @@
     });
     var c = ac(), n = 12, re = new Float32Array(33), im = new Float32Array(33), d = 0.25;
     for (n = 1; n <= 32; n++) { re[n] = (2 / (n * Math.PI)) * Math.sin(n * Math.PI * d); im[n] = (2 / (n * Math.PI)) * (1 - Math.cos(n * Math.PI * d)); }
-    pulseWave = c.createPeriodicWave(re, im);                // 25 % pulsbølge som på en Game Boy
+    pulseWave = c.createPeriodicWave(re, im);                // 25 % pulse wave like on a Game Boy
     noiseBuf = c.createBuffer(1, Math.floor(c.sampleRate * 0.05), c.sampleRate);
     var data = noiseBuf.getChannelData(0);
     for (var i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
@@ -612,14 +612,14 @@
     musicTimer = setInterval(musicTick, 80);
   }
   function stopMusic() { clearInterval(musicTimer); musicTimer = null; }
-  // Browsere kræver et tryk før lyd må starte
+  // Browsers require a tap before sound may start
   function unlockAudio() {
     if (musicOn && !musicTimer) startMusic();
     else if (actx && actx.state === 'suspended') actx.resume();
   }
   ['pointerdown', 'touchend', 'click'].forEach(function (ev) { document.addEventListener(ev, unlockAudio, true); });
 
-  // ====================== Effekter: pixel-partikler, stempler, fyrværkeri ======================
+  // ====================== Effects: pixel particles, stamps, fireworks ======================
   var fxCv = $('fxCv'), fxg = fxCv.getContext('2d'), FXS = 3, parts = [], fxRun = false, fxLast = 0;
   function fxSize() { fxCv.width = Math.ceil(window.innerWidth / FXS); fxCv.height = Math.ceil(window.innerHeight / FXS); }
   function burst(x, y, cols, n, speed, o) {
@@ -658,7 +658,7 @@
     setTimeout(function () { burst(x, y, c, 18, 28, { g: 20, life: .9 }); }, 140);
     tone(220 + Math.random() * 200, .25, .03, 'triangle');
   }
-  function hanabiShow(n, high) {                  // high: kun øverst på skærmen, så brættet forbliver frit
+  function hanabiShow(n, high) {                  // high: only at the top of the screen, so the board stays clear
     for (var i = 0; i < n; i++) setTimeout(function () {
       hanabi(window.innerWidth * (0.15 + Math.random() * 0.7), window.innerHeight * (high ? 0.04 + Math.random() * 0.12 : 0.12 + Math.random() * 0.38));
     }, i * 230);
@@ -685,7 +685,7 @@
     } catch (e) {}
   }
 
-  // ---------- Lydvokabular: små, runde pulsbølge/trekant-lyde. Højere tone = bedre træk. ----------
+  // ---------- Sound vocabulary: small, round pulse/triangle sounds. Higher pitch = better move. ----------
   var PENTA = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21];
   var SFX = {
     select: function () { tone(784, .05, .03, 'triangle'); tone(1047, .06, .026, 'triangle', .035); },
@@ -693,7 +693,7 @@
     bad: function () { tone(330, .08, .034, 'triangle'); tone(247, .13, .034, 'triangle', .075); },
     locked: function () { tone(196, .09, .03, 'triangle'); },
     tink: function () { tone(1568, .05, .026, 'square'); tone(2093, .05, .018, 'square', .03); },
-    match: function (combo, n) {                  // kæder klatrer op ad en pentatonisk skala
+    match: function (combo, n) {                  // chains climb up a pentatonic scale
       var f = 523 * Math.pow(2, PENTA[Math.min(PENTA.length - 1, combo - 1)] / 12);
       tone(f, .09, .04, 'square'); tone(f * 1.5, .1, .03, 'square', .055);
       if (n >= 4) tone(f * 2, .12, .026, 'triangle', .11);
@@ -711,10 +711,10 @@
     lose: function () { arp([7, 5, 3, 0], 130, 'triangle', .045); }
   };
 
-  // ---------- Combo-målere: RENKA (træk i stribe) og MATSURI (festival-tilstand) ----------
+  // ---------- Combo meters: RENKA (moves in a streak) and MATSURI (festival mode) ----------
   var feverEl = $('fever'), feverFill = $('feverFill'), feverTxt = $('feverTxt'), streakEl = $('streak');
   var FEVER_LEN = 9, STREAK_MS = 4200;
-  var fever = { v: 0, on: false, t: 0 }, streak = 0, streakT = 0;   // streakT: sekunder tilbage; står stille mens brættet løser sig
+  var fever = { v: 0, on: false, t: 0 }, streak = 0, streakT = 0;   // streakT: seconds left; stands still while the board resolves
   function streakMult() { return 1 + 0.25 * Math.min(streak - 1, 6); }
   function mult() { return (streak > 1 ? streakMult() : 1) * (fever.on ? 2 : 1); }
   function updateMeters() {
@@ -736,10 +736,10 @@
     fever.on = true; fever.t = FEVER_LEN; fever.v = 0;
     boardEl.classList.add('matsuri');
     stamp('祭', 'MATSURI! x2', 'gold');
-    say('MATSURI! TIDEN STOPPER');
+    say('MATSURI! TIME STOPS');
     hanabiShow(2, true); SFX.matsuri(); vibrate([30, 40, 30, 40, 60]);
   }
-  function endFever() { fever.on = false; boardEl.classList.remove('matsuri'); updateMeters(); say('MATSURI SLUT', true); SFX.matsuriEnd(); }
+  function endFever() { fever.on = false; boardEl.classList.remove('matsuri'); updateMeters(); say('MATSURI OVER', true); SFX.matsuriEnd(); }
   function resetMeters() { fever.v = 0; fever.on = false; fever.t = 0; streak = 0; streakT = 0; boardEl.classList.remove('matsuri'); updateMeters(); }
 
   // ====================== Maskot ======================
@@ -805,7 +805,7 @@
       box.appendChild(p);
     }
   }
-  // Seigaiha (bølgemønster) som pixelart-flise
+  // Seigaiha (wave pattern) as a pixel-art tile
   function wavePattern(cA, cB, lA, lB) {
     var c = document.createElement('canvas'); c.width = c.height = 16;
     var g = c.getContext('2d');
@@ -849,7 +849,7 @@
     var s = (save.seed + nd.n * 7919 + nd.lane * 104729) % 2147483647 || 1;
     return function () { s = (s * 16807) % 2147483647; return s / 2147483647; };
   }
-  // Sværhedsgraden vokser med banenummer og aftager aldrig helt: flere arter, flere forhindringer, hurtigere tid
+  // Difficulty grows with the level number and never fully levels off: more species, more obstacles, faster time
   function levelConfig(nd) {
     var n = nd.n, rnd = nodeRng(nd), i, j;
     var pool = Math.min(TYPES, 5 + Math.floor(n / 8));
@@ -890,7 +890,7 @@
   function zoneAt(row) { return ZONES[Math.max(0, Math.floor(row / ZONE_ROWS)) % ZONES.length]; }
   function seeded(seed) { var s = Math.floor(seed) % 2147483647 || 1; return function () { s = (s * 16807) % 2147483647; return s / 2147483647; }; }
 
-  // Stien genereres række for række ud fra gemmets seed. Af og til deler den sig i to baner, som mødes igen.
+  // The path is generated row by row from the save's seed. Occasionally it splits into two lanes that meet again.
   function resetPath() {
     rows = []; nodeById = {};
     gen = { rnd: seeded(save.seed || 1), mode: 'single', since: 0, gap: 3, left: 0 };
@@ -929,7 +929,7 @@
     for (var id in save.done) { var rr = parseInt(id, 10); if (rr > m) m = rr; }
     return m;
   }
-  // done = klaret, open = kan spilles, locked = endnu ikke nået, closed = den anden gren er valgt
+  // done = cleared, open = playable, locked = not reached yet, closed = the other branch was chosen
   function nodeState(nd) {
     if (save.done[nd.id]) return 'done';
     if (nd.r > 0) {
@@ -944,7 +944,7 @@
   function yOf(nd) { return mapH - 50 - (nd.r - rowLo) * NODE_DY; }
 
   function drawDecor(g, kind, tx, ty, s, v) {
-    if (kind === 'tree' && v < 0.4) {                                  // kirsebærtræ
+    if (kind === 'tree' && v < 0.4) {                                  // cherry tree
       g.fillStyle = '#4a2c14'; g.fillRect((tx + 2) * s, (ty + 1) * s, 2 * s, 4 * s);
       g.fillStyle = '#ff9db5'; g.fillRect(tx * s, (ty - 2) * s, 6 * s, 4 * s); g.fillRect((tx + 1) * s, (ty - 3) * s, 4 * s, s);
       g.fillStyle = '#ffd0dc'; g.fillRect((tx + 1) * s, (ty - 2) * s, s, s); g.fillRect((tx + 4) * s, ty * s, s, s);
@@ -974,7 +974,7 @@
     mapInner.style.height = (mapH * s * (cw / (MAPW * s))) + 'px';
     var g = mapCanvas.getContext('2d');
     var rowY = function (rr) { return mapH - 50 - (rr - rowLo) * NODE_DY; };
-    // bjergsiden: zoner skifter jo højere man kommer (skov, klipper, sne, skyer, ...)
+    // mountainside: zones change the higher you go (forest, cliffs, snow, clouds, ...)
     for (y = 0; y < mapH; y++) {
       g.fillStyle = zoneAt(rowLo + (mapH - 50 - y) / NODE_DY).c;
       g.fillRect(0, y * s, MAPW * s, s);
@@ -983,7 +983,7 @@
       g.fillRect(0, y * s, jag * s, s);
       g.fillRect((MAPW - jag - Math.round(Math.sin(y * 0.13) * 4)) * s, y * s, (jag + 8) * s, s);
     }
-    // bevoksning pr. række (samme hver gang kortet tegnes)
+    // vegetation per row (same every time the map is drawn)
     for (r = Math.max(0, rowLo - 1); r <= hi; r++) {
       var rr = seeded((save.seed || 1) * 3 + r * 977), zone = zoneAt(r);
       for (var d = 0; d < 3; d++) {
@@ -995,7 +995,7 @@
         if (!near) drawDecor(g, zone.deco, tx, ty, s, dv);
       }
     }
-    // torii-porte ved hver zonegrænse
+    // torii gates at each zone boundary
     for (r = ZONE_ROWS; r <= hi; r += ZONE_ROWS) {
       if (r < rowLo) continue;
       var tux = 90, tuy = Math.round(rowY(r) + NODE_DY / 2) - 8;
@@ -1074,13 +1074,13 @@
     mapInner.appendChild(el);
     setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 640);
   }
-  // Kør bilen fra en prik til en anden
+  // Drive the car from one dot to another
   function driveTo(a, b, done) {
     if (!a || !b) { if (done) done(); return; }
     var ay = yOf(a), by = yOf(b);
     carFlip = b.x < a.x;
     var t0 = performance.now(), dur = 900, lastPuff = 0;
-    say('BRUM BRUM!');
+    say('VROOM VROOM!');
     beep(180, .3, .035, 'sawtooth');
     (function step(now) {
       var t = Math.min(1, (now - t0) / dur);
@@ -1101,8 +1101,8 @@
         var nd = nds[i];
         if (nd.r < rowLo || Math.abs(nd.x - ux) > 13 || Math.abs(yOf(nd) - uy) > 13) continue;
         var st = nodeState(nd);
-        if (st === 'locked') { say('LÅST! KLAR DEN FØR'); SFX.locked(); }
-        else if (st === 'closed') { say('DEN STI BLEV VALGT FRA'); SFX.locked(); }
+        if (st === 'locked') { say('LOCKED! CLEAR THE PREVIOUS ONE FIRST'); SFX.locked(); }
+        else if (st === 'closed') { say('THAT PATH WAS NOT CHOSEN'); SFX.locked(); }
         else openLevel(nd);
         return;
       }
@@ -1115,7 +1115,7 @@
     $('mTotal').textContent = save.total;
   }
 
-  // ====================== Skærme ======================
+  // ====================== Screens ======================
   var screen = 'map';
   function showScreen(name) {
     screen = name;
@@ -1146,17 +1146,17 @@
     var hasGlass = c.obst.some(function (o) { return o.kind === 'glass'; });
     var hasThick = c.obst.some(function (o) { return o.kind === 'glass' && o.hp > 1; });
     var hasRock = c.obst.some(function (o) { return o.kind === 'rock'; });
-    if (hasGlass) tips += '<p class="c1">GLAS: LAV EN STRIBE TÆT VED FOR AT BRYDE DET.</p>';
-    if (hasThick) tips += '<p class="c3">TYKT GLAS KRÆVER 2 STRIBER.</p>';
-    if (hasRock) tips += '<p class="c2">STEN: BRYD DEN PÅ SAMME MÅDE.</p>';
-    card('<h1>BANE ' + nd.n + '</h1><div class="jp">どうぶつパズル</div>' +
-      '<div class="rules"><p>SAML FØR TIDEN LØBER UD:</p></div>' + goalHtml(c.goals) +
+    if (hasGlass) tips += '<p class="c1">GLASS: MAKE A MATCH NEXT TO IT TO BREAK IT.</p>';
+    if (hasThick) tips += '<p class="c3">THICK GLASS NEEDS 2 MATCHES.</p>';
+    if (hasRock) tips += '<p class="c2">ROCK: BREAK IT THE SAME WAY.</p>';
+    card('<h1>LEVEL ' + nd.n + '</h1><div class="jp">どうぶつパズル</div>' +
+      '<div class="rules"><p>COLLECT BEFORE TIME RUNS OUT:</p></div>' + goalHtml(c.goals) +
       '<div class="rules"><p>' + c.goals.map(function (g) { return goalName(g) + ' x' + g.need; }).join('<br>') + '</p></div>' +
       (tips ? '<div class="rules">' + tips + '</div>' : '') +
-      '<button class="play" id="cGo">START!</button><button class="play alt" id="cBack">TILBAGE</button>');
+      '<button class="play" id="cGo">START!</button><button class="play alt" id="cBack">BACK</button>');
     bindCard('cGo', function () {
       closeCard();
-      if (!save.done[nd.id] && save.pos !== nd.id) {          // kør hen til banen først (men ikke baglæns ved genspil)
+      if (!save.done[nd.id] && save.pos !== nd.id) {          // drive to the level first (but not backwards when replaying)
         var from = nodeById[save.pos];
         save.pos = nd.id; persist();
         driveTo(from, nd, function () { startLevel(nd); });
@@ -1171,7 +1171,7 @@
   var shuffles = SHUFFLE_START, nextShuffleAt = SHUFFLE_EVERY;
   var running = false, busy = false, ended = false;
   var selected = null, uid = 0, lastTick = 0, idleSince = 0, hintTiles = [];
-  var sess = 0, pending = null, twitchAt = 0, swapCount = 0;   // sess: stiger ved baneskift/afbrydelse, så gamle async-kald dør stille
+  var sess = 0, pending = null, twitchAt = 0, swapCount = 0;   // sess: increases on level change/abort, so old async calls die quietly
   bestEl.textContent = save.best;
 
   function idx(r, c) { return r * SIZE + c; }
@@ -1391,7 +1391,7 @@
     var u1 = r >= 1 && board[idx(r - 1, c)], u2 = r >= 2 && board[idx(r - 2, c)];
     return !!(u1 && u2 && u1.type === type && u2.type === type);
   }
-  function buildBoard() {                          // ét forsøg: ingen færdige striber, forhindringer lægges ovenpå
+  function buildBoard() {                          // one attempt: no finished matches, obstacles are placed on top
     var i, r, c;
     Array.prototype.slice.call(boardEl.querySelectorAll('.tile')).forEach(function (e) { e.parentNode.removeChild(e); });
     for (i = 0; i < board.length; i++) board[i] = null;
@@ -1402,11 +1402,11 @@
     }
     if (cfg && cfg.obst.length) placeObstacles();
   }
-  function fillBoard() {                           // aldrig rekursion: højst 40 forsøg, så et sikkerhedsnet
+  function fillBoard() {                           // never recursion: at most 40 attempts, as a safety net
     for (var n = 0; n < 40; n++) { buildBoard(); if (findMove()) return; }
     ensurePlayable();
   }
-  // Glas låser et dyr (kan ikke byttes eller matches); sten er en blok. Begge brydes af matches ved siden af.
+  // Glass locks a pet (cannot be swapped or matched); rock is a block. Both are broken by matches next to them.
   function placeObstacles() {
     var cells = [], i;
     for (i = 0; i < board.length; i++) cells.push(i);
@@ -1419,7 +1419,7 @@
       paint(t);
     });
   }
-  // Garanti mod et dødt bræt: findes der intet træk, bliver én fri brik med en fri nabo til en regnbue (altid et lovligt bytte).
+  // Guarantee against a dead board: if no move exists, one free tile with a free neighbour becomes a rainbow (always a legal swap).
   function ensurePlayable() {
     if (findMove()) return true;
     for (var i = 0; i < board.length; i++) {
@@ -1436,7 +1436,7 @@
     }
     return false;
   }
-  function retypeFree(free) {                      // nødløsning: tegn nye dyr til de frie brikker, til brættet er gyldigt
+  function retypeFree(free) {                      // emergency fallback: draw new pets for the free tiles until the board is valid
     for (var n = 0; n < 200; n++) {
       free.forEach(function (p) {
         var t = board[p];
@@ -1449,7 +1449,7 @@
     }
     return false;
   }
-  // Glas og sten bliver på deres plads (de kan jo heller ikke byttes); kun de frie brikker blandes.
+  // Glass and rock stay in place (they cannot be swapped either); only the free tiles are shuffled.
   function shuffleBoard() {
     var free = [], i, j, k, tmp, ok = false;
     for (i = 0; i < board.length; i++) if (board[i] && !board[i].lock) free.push(i);
@@ -1465,7 +1465,7 @@
     return ok;
   }
 
-  // ---------- Mål ----------
+  // ---------- Goals ----------
   function renderGoals() {
     goalsEl.innerHTML = '';
     cfg.goals.forEach(function (g, i) {
@@ -1495,7 +1495,7 @@
   function updateShuffleUI() {
     shufN.textContent = shuffles;
     shuffleBtn.disabled = shuffles <= 0;
-    shufHint.textContent = shuffles >= SHUFFLE_CAP ? 'MAX SHUFFLES' : '+1 ved ' + nextShuffleAt + ' point';
+    shufHint.textContent = shuffles >= SHUFFLE_CAP ? 'MAX SHUFFLES' : '+1 at ' + nextShuffleAt + ' points';
   }
   function addScore(n) {
     score += n;
@@ -1548,11 +1548,11 @@
     boardEl.appendChild(el);
     setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, ms + 40);
   }
-  function setMove(ms, ez) {                     // styrer brikkernes glide-tid (CSS-variabel), så JS og CSS altid er enige
+  function setMove(ms, ez) {                     // controls the tiles' slide time (CSS variable), so JS and CSS always agree
     root.style.setProperty('--mv', ms + 'ms');
     if (ez) root.style.setProperty('--ez', ez); else root.style.removeProperty('--ez');
   }
-  function tempo(combo) { return combo <= 1 ? 1 : combo === 2 ? 0.9 : combo === 3 ? 0.8 : 0.7; }   // lange kæder spiller hurtigere
+  function tempo(combo) { return combo <= 1 ? 1 : combo === 2 ? 0.9 : combo === 3 ? 0.8 : 0.7; }   // long chains play faster
   function landFx(t) { t.el.classList.add('land'); setTimeout(function () { t.el.classList.remove('land'); }, 190); }
   function bornFx(t, kind) {
     var p = boardPos(t.r, t.c);
@@ -1563,7 +1563,7 @@
   var COMBO_STAMPS = [null, null, ['連鎖', 'RENSA!', ''], ['大連鎖', 'DAI-RENSA!!', 'cyan'], ['超連鎖', 'CHOU-RENSA!!!', 'gold'], ['神連鎖', 'KAMI-RENSA!!!!', 'gold']];
   var BORN_WORDS = { row: 'KATANA!', col: 'KATANA!', bomb: 'BAKUDAN!', rainbow: 'NIJI!!' };
 
-  // tok: banens "session"; ændres den undervejs (baneskift/afbrydelse), stopper løsningen uden at røre brættet
+  // tok: the level's "session"; if it changes along the way (level change/abort), resolution stops without touching the board
   async function resolve(forced, prefer, depth, tok) {
     var combo = 0, iter = 0;
     while (true) {
@@ -1585,7 +1585,7 @@
       protect.forEach(function (c) { clear.delete(c); });
       var ex = expand(clear, protect, f && f.targets);
 
-      // forhindringer tager skade af eksplosioner og af matches lige ved siden af
+      // obstacles take damage from explosions and from matches right next to them
       var hits = new Set(), broken = 0, blasted = [];
       clear.forEach(function (i) { if (board[i] && board[i].lock > 0) blasted.push(i); });
       blasted.forEach(function (i) { clear.delete(i); hits.add(i); });
@@ -1610,7 +1610,7 @@
       });
       if (hits.size && !broken) SFX.tink();
 
-      // feedback-trappe: 1 almindelig · 2 fire i række · 3 femmer/bomber/special aktiveret · 4 specialkombination
+      // feedback ladder: 1 ordinary · 2 four in a row · 3 fives/bombs/special activated · 4 special combo
       var big = !!(f && f.name);
       var rare = spawns.some(function (sp) { return sp.kind === 'rainbow' || sp.kind === 'bomb'; });
       var tier = big ? 4 : (rare || ex.n ? 3 : (spawns.length ? 2 : 1));
@@ -1640,7 +1640,7 @@
         say(BORN_WORDS[sp.kind], true);
       });
       if (broken) {
-        byType.obst = broken; say('PARIN! GLAS BRUDT', true); SFX.glass(); addTime(broken * 1.5);
+        byType.obst = broken; say('PARIN! GLASS BROKEN', true); SFX.glass(); addTime(broken * 1.5);
         hits.forEach(function (j) { if (board[j] && !board[j].lock) { var gp = boardPos(board[j].r, board[j].c); burst(gp.x, gp.y, ['#bff3ff', '#ffffff', '#7fd0ff'], 12, 55, { star: true, life: .5 }); } });
       }
       countCleared(byType);
@@ -1651,7 +1651,7 @@
       addTime(Math.min(5, clear.size * TIME_PER_TILE * (combo > 1 ? 1.3 : 1)));
       if (firstIdx !== null) floatText('+' + gained + (combo > 1 ? ' x' + combo : ''), Math.floor(firstIdx / SIZE), firstIdx % SIZE, 14);
 
-      // kæder: x2 er hverdag (kun tal + stigende tone), x3 får et lille stempel, x4+ fyrværkeri over brættet
+      // chains: x2 is everyday (only number + rising tone), x3 gets a small stamp, x4+ fireworks over the board
       if (combo >= 3 && !big) {
         var cw = COMBO_STAMPS[Math.min(combo, 5)];
         stamp(cw[0], cw[1], cw[2] + (combo === 3 ? ' sm' : ''));
@@ -1659,7 +1659,7 @@
         addTime(2);
         if (combo >= 4) { var tp2 = boardTopPos(); hanabi(tp2.x, tp2.y); }
       }
-      // lyd, ryst og vibration følger trappen
+      // sound, shake and vibration follow the ladder
       if (big) SFX.combo(2);
       else if (ex.n) SFX.blast(Math.min(3, ex.n));
       else SFX.match(combo, clear.size);
@@ -1697,7 +1697,7 @@
       if (tok !== sess) return combo;
       fell.forEach(landFx);
     }
-    if (!findMove()) {                              // ingen træk: bland automatisk (højst 3 gange i træk, derefter garanti)
+    if (!findMove()) {                              // no moves: shuffle automatically (at most 3 times in a row, then a guarantee)
       if ((depth || 0) >= 3) { ensurePlayable(); return combo; }
       say('KAWARI! SHUFFLE');
       await sleep(200);
@@ -1738,8 +1738,8 @@
       if (tok !== sess) return;
       a.el.classList.remove('bad'); b.el.classList.remove('bad');
     } else {
-      // RENKA: en stribe fortsætter hvis næste træk kommer før streakT løber ud. Uret står stille mens brættet løser sig
-      // og genstartes først når alt er faldet til ro, så kæder aldrig æder af din tid.
+      // RENKA: a streak continues if the next move comes before streakT runs out. The clock stands still while the board resolves
+      // and restarts only when everything has settled, so chains never eat into your time.
       streak = (streak > 0 && streakT > 0) ? streak + 1 : 1;
       updateMeters();
       if (streak === 3 || streak === 5 || streak === 8) { say('RENKA x' + streakMult() + '!', true); SFX.renka(); }
@@ -1769,8 +1769,8 @@
     if (goalsDone()) levelWin();
     drainPending();
   }
-  // Ét-træks input-buffer: et sving/tryk under en kæde huskes (kun det seneste) og udføres, når brættet er faldet til ro.
-  // Det valideres igen på det rolige bræt og udløber efter BUFFER_MS, så det aldrig giver uventede bytter.
+  // One-move input buffer: a swipe/tap during a chain is remembered (only the latest) and executed when the board has settled.
+  // It is validated again on the calm board and expires after BUFFER_MS, so it never causes unexpected swaps.
   function queueMove(i, j) { pending = { i: i, j: j, at: performance.now() }; }
   function drainPending() {
     var p = pending; pending = null;
@@ -1823,7 +1823,7 @@
     if (Math.abs(dx) > Math.abs(dy)) c += dx > 0 ? 1 : -1; else r += dy > 0 ? 1 : -1;
     clearSelection();
     if (r >= 0 && c >= 0 && r < SIZE && c < SIZE) {
-      if (busy) { queueMove(from, idx(r, c)); SFX.select(); }      // brættet løser sig: husk træk
+      if (busy) { queueMove(from, idx(r, c)); SFX.select(); }      // the board is resolving: remember the move
       else trySwap(from, idx(r, c));
     }
     down = null;
@@ -1832,12 +1832,12 @@
     if (!down) return;
     var i = cellFromEvent(e);
     if (!down.moved && i >= 0) {
-      if (busy) {                                                   // to tryk under en kæde = et buffer-træk
+      if (busy) {                                                   // two taps during a chain = one buffered move
         if (pending && pending.j === undefined && pending.i !== i && neighbors(pending.i, i)) { queueMove(pending.i, i); SFX.select(); }
         else pending = { i: i, j: undefined, at: performance.now() };
       }
       else if (selected !== null && selected !== i && neighbors(selected, i)) { var from = selected; clearSelection(); trySwap(from, i); }
-      else if (selected === i && down.wasSel && down.i === i) clearSelection();     // tryk igen = fravælg
+      else if (selected === i && down.wasSel && down.i === i) clearSelection();     // tap again = deselect
       else if (selected !== i) select(i);
     }
     down = null;
@@ -1864,10 +1864,10 @@
     showScreen('game');
     fillBoard(); renderGoals(); layout();
     running = true; lastTick = 0; idleSince = performance.now();
-    say('HAJIME! BANE ' + n);
+    say('HAJIME! LEVEL ' + n);
     arp([0, 2, 4], 70, 'triangle', .04);
   }
-  function abortLevel() {                          // forlad banen midt i en kæde uden at efterlade levende async-kald
+  function abortLevel() {                          // leave the level in the middle of a chain without leaving live async calls behind
     sess++; running = false; ended = true; busy = false; pending = null; down = null;
     clearSelection(); clearHint();
   }
@@ -1885,19 +1885,19 @@
     fever.on = false; boardEl.classList.remove('matsuri'); hanabiShow(6);
     var forks = nd.children.length > 1;
     say('YATTA!'); SFX.win(); vibrate([20, 40, 20]);
-    card('<h1>KLARET!</h1><div class="jp">やったー!</div>' + starsHtml(st) +
+    card('<h1>CLEARED!</h1><div class="jp">やったー!</div>' + starsHtml(st) +
       '<div class="big">' + score + '</div>' +
-      '<div class="rules"><p>BANE ' + nd.n + (firstClear ? '<br>' + (forks ? 'STIEN GRENER! VÆLG VEJ.' : 'NÆSTE BANE ER ÅBEN!') : '') + '</p></div>' +
-      '<button class="play" id="cGo">VIDERE</button>');
+      '<div class="rules"><p>LEVEL ' + nd.n + (firstClear ? '<br>' + (forks ? 'THE PATH SPLITS! CHOOSE A WAY.' : 'NEXT LEVEL IS OPEN!') : '') + '</p></div>' +
+      '<button class="play" id="cGo">CONTINUE</button>');
     bindCard('cGo', function () {
       closeCard();
       showScreen('map');
       if (!firstClear) return;
       var open = nd.children.map(function (id) { return nodeById[id]; }).filter(function (o) { return nodeState(o) === 'open'; });
-      if (open.length === 1) {                           // kun én vej: bilen kører selv videre
+      if (open.length === 1) {                           // only one way: the car drives on by itself
         save.pos = open[0].id; persist();
         setTimeout(function () { carAt(nd.x, yOf(nd)); scrollToCar(false); driveTo(nd, open[0], refreshMapHud); }, 80);
-      } else if (open.length > 1) setTimeout(function () { say('VÆLG EN STI!'); }, 200);
+      } else if (open.length > 1) setTimeout(function () { say('CHOOSE A PATH!'); }, 200);
     });
   }
   function levelFail() {
@@ -1907,16 +1907,16 @@
     var left = cfg.goals.reduce(function (a, g) { return a + Math.max(0, g.need - g.got); }, 0);
     fever.on = false; boardEl.classList.remove('matsuri');
     say('OWARI...'); SFX.lose(); vibrate([20, 60, 20]);
-    card('<h1>TIDEN ER UDE</h1><div class="jp">時間切れ</div>' +
+    card('<h1>TIME IS UP</h1><div class="jp">時間切れ</div>' +
       '<div class="big">' + score + '</div>' +
-      '<div class="rules"><p>DER MANGLEDE ' + left + (cfg.goals.some(function (g) { return g.type === 'obst'; }) ? ' STK.' : ' DYR') + '</p></div>' +
-      '<button class="play" id="cGo">PRØV IGEN</button><button class="play alt" id="cBack">KORT</button>');
+      '<div class="rules"><p>YOU NEEDED ' + left + (cfg.goals.some(function (g) { return g.type === 'obst'; }) ? ' MORE' : ' MORE PETS') + '</p></div>' +
+      '<button class="play" id="cGo">TRY AGAIN</button><button class="play alt" id="cBack">MAP</button>');
     bindCard('cGo', function () { closeCard(); startLevel(curNode); });
     bindCard('cBack', function () { closeCard(); showScreen('map'); });
   }
 
   // ====================== Hovedloop (match-3 tid) ======================
-  function idleTwitch(now) {                       // små, sjældne bevægelser: dyrene lever, men brættet forbliver læseligt
+  function idleTwitch(now) {                       // small, rare movements: the pets are alive, but the board stays readable
     twitchAt = now + 1800 + Math.random() * 1600;
     var t = board[Math.floor(Math.random() * board.length)];
     if (!t || t.type < 0 || t.lock || t.special) return;
@@ -1925,13 +1925,13 @@
   }
   function loop(now) {
     requestAnimationFrame(loop);
-    // pause: kort åbent, fane skjult eller ikke i spil. Intet ur løber, ingen streak eller MATSURI forsvinder
+    // pause: briefly open, tab hidden or not in play. No clock runs, no streak or MATSURI disappears
     if (!running || screen !== 'game' || !overlay.hidden || document.hidden) { lastTick = 0; return; }
     if (!lastTick) lastTick = now;
     var dt = Math.min(0.25, (now - lastTick) / 1000);
     lastTick = now;
     if (!busy) {
-      if (!fever.on) timeLeft -= dt * cfg.drain;                     // tiden står stille under MATSURI
+      if (!fever.on) timeLeft -= dt * cfg.drain;                     // time stands still during MATSURI
       if (now - idleSince > 5000) showHint();
       if (streak) { streakT -= dt; if (streakT <= 0) { streak = 0; streakT = 0; updateMeters(); } }
       if (now > twitchAt) idleTwitch(now);
@@ -1941,7 +1941,7 @@
       fever.t -= dt;
       if (fever.t <= 0) endFever(); else feverFill.style.width = (fever.t / FEVER_LEN * 100).toFixed(1) + '%';
     }
-    if (timeLeft <= 0 && !busy) { timeLeft = 0; levelFail(); }     // aldrig midt i en kæde
+    if (timeLeft <= 0 && !busy) { timeLeft = 0; levelFail(); }     // never in the middle of a chain
     var frac = Math.max(0, timeLeft) / TIME_MAX;
     fillEl.style.width = (frac * 100).toFixed(1) + '%';
     timerEl.classList.toggle('low', frac < 0.25);
@@ -1970,8 +1970,8 @@
   });
   onTap(mapBtn, function () {
     if (screen === 'game' && running && !ended) {
-      card('<h1>FORLAD BANEN?</h1><div class="rules"><p>DINE POINT I DENNE BANE GÅR TABT.</p></div>' +
-        '<button class="play" id="cGo">JA, TIL KORTET</button><button class="play alt" id="cBack">BLIV</button>');
+      card('<h1>LEAVE THE LEVEL?</h1><div class="rules"><p>YOUR POINTS IN THIS LEVEL WILL BE LOST.</p></div>' +
+        '<button class="play" id="cGo">YES, TO THE MAP</button><button class="play alt" id="cBack">STAY</button>');
       bindCard('cGo', function () { closeCard(); abortLevel(); showScreen('map'); });
       bindCard('cBack', closeCard);
       return;
@@ -2014,13 +2014,13 @@
   if (!nodeById[save.pos]) save.pos = '0:0';
   showScreen('map');
   card('<canvas class="big-m" id="introM" width="72" height="72"></canvas>' +
-    '<h1>HARBU<span>ZOO</span></h1><div class="kanji">動物園</div><div class="jp">どうぶつパズル</div>' +
-    '<div class="rules"><p>KØR OP AD BJERGET. STIEN ER UENDELIG OG GRENER SIG UNDERVEJS: VÆLG SELV VEJ!</p>' +
-    '<p>HVER BANE HAR ET <b class="c3">MÅL</b>: SAML X AF ET DYR FØR TIDEN LØBER UD.</p>' +
-    '<p><b class="c1">4 I TRÆK</b> = KATANA &middot; <b class="c2">L/T</b> = BAKUDAN &middot; <b class="c3">5</b> = NIJI</p>' +
-    '<p>BYT TO SPECIALBRIKKER FOR EN <b class="c3">MEGA-KOMBO</b>. KÆDER, <b class="c1">RENKA</b> (TRÆK I STRIBE) OG <b class="c2">MATSURI</b>-FESTEN GIVER FLERE POINT!</p>' +
-    '<p>DYR I <b class="c1">GLAS</b> ER LÅST. LAV EN STRIBE VED SIDEN AF FOR AT BRYDE DET. JO HØJERE DU KOMMER, JO VANSKELIGERE BLIVER DET!</p></div>' +
-    '<button class="play" id="cGo">TIL KORTET</button>');
+    '<h1>MANIC <span>PETS</span></h1><div class="kanji">動物園</div><div class="jp">どうぶつパズル</div>' +
+    '<div class="rules"><p>DRIVE UP THE MOUNTAIN. THE PATH IS ENDLESS AND SPLITS ALONG THE WAY: CHOOSE YOUR OWN ROUTE!</p>' +
+    '<p>EVERY LEVEL HAS A <b class="c3">GOAL</b>: COLLECT X OF A PET BEFORE TIME RUNS OUT.</p>' +
+    '<p><b class="c1">4 IN A ROW</b> = KATANA &middot; <b class="c2">L/T</b> = BAKUDAN &middot; <b class="c3">5</b> = NIJI</p>' +
+    '<p>SWAP TWO SPECIAL TILES FOR A <b class="c3">MEGA COMBO</b>. CHAINS, <b class="c1">RENKA</b> (MOVES IN A STREAK) AND THE <b class="c2">MATSURI</b> FESTIVAL GIVE MORE POINTS!</p>' +
+    '<p>PETS IN <b class="c1">GLASS</b> ARE LOCKED. MAKE A MATCH NEXT TO IT TO BREAK IT. THE HIGHER YOU GO, THE HARDER IT GETS!</p></div>' +
+    '<button class="play" id="cGo">TO THE MAP</button>');
   spriteCanvas(SPRITES[1], 6, $('introM'));
   bindCard('cGo', function () { closeCard(); showScreen('map'); });
   setTimeout(function () { drawMap(); scrollToCar(false); }, 120);
@@ -2040,7 +2040,7 @@
       setTime: function (t) { timeLeft = t; },
       carPos: function () { return { x: carEl._ux, y: carEl._uy }; },
       reset: function () { save.done = {}; save.pos = '0:0'; save.total = 0; persist(); drawMap(); refreshMapHud(); },
-      // --- test-hooks (kun med ?debug) ---
+      // --- test hooks (only with ?debug) ---
       shuffleBoard: shuffleBoard, fillBoard: fillBoard, findMove: findMove, ensurePlayable: ensurePlayable,
       matches: function () { return findMatches().size; },
       pending: function () { return pending; }, sess: function () { return sess; }, abortLevel: abortLevel,
